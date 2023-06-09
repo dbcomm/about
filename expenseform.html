@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/main.css">
+  <title >Expense Form</title>
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+
+    
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+      color: white;
+      text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+
+    }
+    
+    .clear-entry {
+      background-color: #f44336;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .print-button {
+      display: block;
+      margin-top: 20px;
+    }
+
+    @media print {
+      @page{
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+      body{
+        padding-top: 5rem;
+        padding-bottom: 5rem;
+      }
+
+      .standout{
+        text-shadow: none;
+        color: black;
+      }
+      
+      th, td{
+        text-shadow: none;
+        color: black;
+      }
+
+      button {
+        display: none !important;
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <h1 class="standout">Expense Form</h1>
+  <form>
+    <label for="name" class="standout">Name:</label>
+    <input type="text" id="name" name="name" required><br><br>
+    
+    <label for="notes" class="standout">Notes:</label>
+    <textarea id="notes" name="notes" rows="4" cols="50"></textarea><br><br>
+    
+    <label for="date" class="standout">Date:</label>
+    <input type="date" id="date" name="date" required><br><br>
+    
+    <h2 class="standout">Expense Items</h2>
+    <table>
+      <tr>
+        <th>Memo</th>
+        <th>Gross Total</th>
+        <th>GST</th>
+        <th>PST</th>
+        <th>Net Total</th>
+        <!-- <th></th> -->
+      </tr>
+      <tr>
+        <td><input type="text" name="memo[]" required></td>
+        <td><input type="number" name="gross_total[]" required></td>
+        <td><input type="number" name="gst[]" required></td>
+        <td><input type="number" name="pst[]" required></td>
+        <td><input type="number" name="net_total[]" required></td>
+        <!-- <td><button type="button" class="clear-entry">Clear Entry</button></td> -->
+      </tr>
+    </table>
+    <br>
+    
+    <button type="button" onclick="calculateNetTotal()">Calculate Net Total</button>
+    <button type="button" onclick="addRow()">Add Row</button>
+    <button type="button" class="print-button" onclick="window.print()">Print Form</button>
+  </form>
+
+  <script>
+    function calculateNetTotal() {
+      var grossTotalInputs = document.getElementsByName("gross_total[]");
+      var gstInputs = document.getElementsByName("gst[]");
+      var pstInputs = document.getElementsByName("pst[]");
+      var netTotalInputs = document.getElementsByName("net_total[]");
+
+      for (var i = 0; i < netTotalInputs.length; i++) {
+        var grossTotal = parseFloat(grossTotalInputs[i].value) || 0;
+        var gst = parseFloat(gstInputs[i].value) || 0;
+        var pst = parseFloat(pstInputs[i].value) || 0;
+        var netTotal = grossTotal + gst + pst;
+
+        netTotalInputs[i].value = netTotal.toFixed(2);
+      }
+    }
+
+    function addRow() {
+      var table = document.querySelector("table");
+      var row = table.insertRow(-1);
+      var columns = ['memo[]', 'gross_total[]', 'gst[]', 'pst[]', 'net_total[]'];
+
+      for (var i = 0; i < columns.length; i++) {
+        var cell = row.insertCell(i);
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = columns[i];
+        input.required = true;
+        cell.appendChild(input);
+      }
+
+      var deleteButtonCell = row.insertCell(-1);
+      var deleteButton = document.createElement("button");
+      deleteButton.className = "clear-entry";
+      deleteButton.type = "button";
+      deleteButton.innerHTML = "Clear Entry";
+      deleteButtonCell.appendChild(deleteButton);
+
+      // Add event listener to the new clear entry button
+      deleteButton.addEventListener("click", function() {
+        this.parentNode.parentNode.remove();
+      });
+    }
+  </script>
+  <footer>
+    <p>To clear the form and start over, please refresh the page</p>
+    <p>Please note this is a work in process there are bound to be bugs</p>
+  </footer>
+</body>
+</html>

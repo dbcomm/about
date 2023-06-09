@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/main.css">
+  <title>Initiative Tracker</title>
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    label {
+      color: white;
+      text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+    }
+
+    h1 {
+      text-align: center;
+      color: white;
+      text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+    }
+
+    div {
+      margin-bottom: 10px;
+      color: white;
+      text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      align-items: center;
+      padding: 5px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    li span {
+      padding: 5px;
+      color: white;
+      text-shadow: -2px -2px 0 black, 2px -2px 0 black, -2px 2px 0 black, 2px 2px 0 black;
+    }
+
+    li input[type="number"] {
+      width: 50px;
+    }
+
+    li button {
+      margin-left: 10px;
+    }
+
+    .heading {
+      font-weight: bold;
+      text-align: left;
+      border-bottom: 2px solid #ccc;
+    }
+  </style>
+
+
+</head>
+
+<body>
+  <h1>Initiative Tracker</h1>
+  
+  <div>
+    <label for="playerName">Player Name:</label>
+    <input type="text" id="playerName" placeholder="Enter player name">
+    <label for="initiativeScore">Initiative Score:</label>
+    <input type="number" id="initiativeScore" placeholder="Enter initiative score" min="0" step="1">
+    <button onclick="addPlayer()">Add</button>
+  </div>
+
+  <div>
+    <label for="sortOrder">Sort Order:</label>
+    <select id="sortOrder">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+    <button onclick="sortList()">Sort</button>
+    <!-- <button onclick="reSortList()">Re-sort</button> -->
+  </div>
+  
+  <ul id="playerList">
+    <li class="heading">
+      <span>Player Name</span>
+      <span>Initiative Score</span>
+      <span>Actions</span>
+    </li>
+    <!-- Player list will be dynamically generated here -->
+  </ul>
+  
+  <script>
+    var currentSortOrder = "asc"; // Variable to store the current sort order
+
+    // Function to add a new player to the list
+    function addPlayer() {
+      var playerNameInput = document.getElementById("playerName");
+      var initiativeScoreInput = document.getElementById("initiativeScore");
+      var playerName = playerNameInput.value;
+      var initiativeScore = initiativeScoreInput.value;
+      
+      // Clear the input fields
+      playerNameInput.value = "";
+      initiativeScoreInput.value = "";
+      
+      // Create a new list item with player name and initiative score
+      var listItem = document.createElement("li");
+      listItem.innerHTML = "<span>" + playerName + "</span><input type='text' value='" + initiativeScore + "' pattern='\\d*' oninput='updateInitiativeScore(this)'><button onclick='removePlayer(this)'>Remove</button>";
+      
+      var playerList = document.getElementById("playerList");
+      playerList.appendChild(listItem);
+    }
+
+    // Function to remove a player from the list
+    function removePlayer(button) {
+      var listItem = button.parentNode;
+      var playerList = document.getElementById("playerList");
+      playerList.removeChild(listItem);
+    }
+
+    // Function to update the initiative score
+    function updateInitiativeScore(input) {
+      var initiativeInput = input.value;
+      var listItem = input.parentNode;
+      var playerNameSpan = listItem.getElementsByTagName("span")[0];
+      playerNameSpan.setAttribute("contenteditable", "false"); // Disable editing player name
+    }
+
+    // Function to sort the list by initiative score
+    function sortList() {
+      var playerList = document.getElementById("playerList");
+      var listItems = Array.from(playerList.getElementsByTagName("li"));
+      var sortOrderSelect = document.getElementById("sortOrder");
+      currentSortOrder = sortOrderSelect.value;
+
+      // Find the index of the heading row
+      var headingIndex = listItems.findIndex(function(item) {
+        return item.classList.contains("heading");
+      });
+
+      // Remove the heading row from the list items
+      var headingRow = listItems.splice(headingIndex, 1)[0];
+
+      // Sort the remaining list items based on initiative score and sort order
+      listItems.sort(function(a, b) {
+        var scoreA = parseInt(a.getElementsByTagName("input")[0].value);
+        var scoreB = parseInt(b.getElementsByTagName("input")[0].value);
+
+        if (currentSortOrder === "asc") {
+          return scoreA - scoreB;
+        } else {
+          return scoreB - scoreA;
+        }
+      });
+
+      // Clear the playerList
+      playerList.innerHTML = "";
+
+      // Append the heading row back
+      playerList.appendChild(headingRow);
+
+      // Append the sorted list items
+      listItems.forEach(function(item) {
+        playerList.appendChild(item);
+      });
+    }
+
+    // Function to re-sort the list using the current sort order
+    function reSortList() {
+      var playerList = document.getElementById("playerList");
+      var listItems = Array.from(playerList.getElementsByTagName("li"));
+
+      // Reverse the order of list items (excluding the heading row)
+      var reversedItems = listItems.slice(1).reverse();
+
+      // Remove all existing list items except the heading
+      while (playerList.children.length > 1) {
+        playerList.removeChild(playerList.lastChild);
+      }
+
+      // Append the reversed list items
+      reversedItems.forEach(function(item) {
+        playerList.appendChild(item);
+      });
+    }
+  </script>
+</body>
+</html>

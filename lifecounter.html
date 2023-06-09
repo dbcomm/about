@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/css/lifecounter.css">
+    <title>Life Counter</title>
+  </head>
+  <body>
+    <!-- Define the containing flex grid -->
+    <div class="grid">
+        <!-- Createing Seperate containers for each quadrant -->
+      <div class="box red">
+        <!-- Creates a title box that can be selected to cahnge the players name -->
+       <button class="box-title" id="title1" onclick="updateTitle('box1')">Player 1</button>
+       <!-- Creates the number box in the middle of each box -->
+        <div class="number" id="box1">40</div>
+        <!-- Creating the buttons on the bottom of each box to change the life totals by +/- 1 and reset to 40 -->
+        <div class="buttons">
+          <button class="button" onclick="increment('box1')">+</button>
+          <button class="button" onclick="decrement('box1')">-</button>
+          <button class="button" onclick="reset('box1')">Reset</button>
+        </div>
+        
+      </div>
+      <div class="box blue">
+          <button class="box-title" id="title2" onclick="updateTitle('box2')">Player 2</button>
+        <div class="number" id="box2">40</div>
+        <div class="buttons">
+          <button class="button" onclick="increment('box2')">+</button>
+          <button class="button" onclick="decrement('box2')">-</button>
+          <button class="button" onclick="reset('box2')">Reset</button>
+        </div>
+      </div>
+      <div class="box yellow">
+          <button class="box-title" id="title3" onclick="updateTitle('box3')">Player 3</button>
+        <div class="number" id="box3">40</div>
+        <div class="buttons">
+          <button class="button" onclick="increment('box3')">+</button>
+          <button class="button" onclick="decrement('box3')">-</button>
+          <button class="button" onclick="reset('box3')">Reset</button>
+        </div>
+      </div>
+      <div class="box green">
+        <button class="box-title" id="title4" onclick="updateTitle('box4')">Player 4</button>
+        <div class="number" id="box4">40</div>
+        <div class="buttons">
+          <button class="button" onclick="increment('box4')">+</button>
+          <button class="button" onclick="decrement('box4')">-</button>
+          <button class="button" onclick="reset('box4')">Reset</button>
+        </div>
+      </div>
+    </div>
+  
+
+    <!-- The scripts for the various buttons and elements used by the page -->
+    <script>
+        // The function that increments the numebr by 1 for the given box 
+      function increment(boxId) {
+        var box = document.getElementById(boxId);
+        var number = parseInt(box.innerText);
+        box.innerText = number + 1;
+        if (number < 0) {
+          box.innerHTML = '<img src="C:\Users\dave\Pictures\JS.jpg">';
+        }
+      }
+    //   The function to decrement ethe number by 1 for the given box
+      function decrement(boxId) {
+        var box = document.getElementById(boxId);
+        var number = parseInt(box.innerText);
+        box.innerText = number - 1;
+        if (number <= 0) {
+          box.innerHTML = '<img src="https://www.nicepng.com/png/detail/235-2359549_street-fighter-ko-png-ko-street-fighter-png.png" alt="Street Fighter Ko Png - Ko Street Fighter Png@nicepng.com">';
+        }
+      }
+  
+    //   Function to reset the box numebr to 40 for starting life totals
+      function reset(boxId) {
+        var box = document.getElementById(boxId);
+        var number = parseInt(box.innerText);
+        box.innerText = 40;
+      }
+
+
+    //   Allows changing of the heading in each box to set a players name by mouse click
+      function updateTitle(boxId) {
+        var title = document.getElementById('title' + boxId.slice(-1));
+        var userInput = prompt('Enter a title for the box:');
+        title.innerText = userInput || 'Set Title';
+      }
+  
+    </script>
+  </body>
+</html>
