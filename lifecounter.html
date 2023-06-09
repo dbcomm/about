@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="/css/lifecounter.css">
+    <link rel="stylesheet" href="css/lifecounter.css">
     <title>Life Counter</title>
   </head>
   <body>
@@ -62,9 +62,7 @@
         var box = document.getElementById(boxId);
         var number = parseInt(box.innerText);
         box.innerText = number + 1;
-        if (number < 0) {
-          box.innerHTML = '<img src="C:\Users\dave\Pictures\JS.jpg">';
-        }
+
       }
     //   The function to decrement ethe number by 1 for the given box
       function decrement(boxId) {
